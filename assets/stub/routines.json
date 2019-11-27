@@ -1,0 +1,254 @@
+[
+  {
+    "id": 1,
+    "title": "How to cook pasta",
+    "source": "https://blog.giallozafferano.it/paola67/how-to-cook-pasta/",
+    "instructions": [
+      {
+        "id": 1,
+        "name": "Prepare the water",
+        "description": "Fill a large and tall pot with natural water and put a lid on (to make water boil faster). If you want to reduce the time you can use hot water.",
+        "countdown": 3,
+        "videoUrl": "arm-extension.webm"
+      },
+      {
+        "id": 2,
+        "name": "Boil the water",
+        "description": "Place the pot on the stove over high heat.",
+        "countdown": 4,
+        "videoUrl": "TBD"
+      },
+      {
+        "id": 3,
+        "name": "Cook the pasta",
+        "description": "When the water begins to boil, remove the lid and throw in a few sizeable pinches of coarse salt. Let it dissolve before adding your pasta. DO NOT COVER the pot with the lid anymore.",
+        "countdown": 2,
+        "videoUrl": "TBD"
+      },
+      {
+        "id": 4,
+        "name": "Stir the pasta",
+        "description": "Stir frequently your pasta with a long spoon during the first minutes to prevent it from sticking. Then stir it occasionally till the end of the cooking process.",
+        "countdown": 3,
+        "videoUrl": "TBD"
+      },
+      {
+        "id": 5,
+        "name": "Drain the pasta",
+        "description": "When your pasta is ready (check every now and then), drain it into a colander. Remember that 'al dente pasta' is still hard in the centre. DO NOT RINSE your pasta under running water.",
+        "countdown": 2,
+        "videoUrl": "TBD"
+      },
+      {
+        "id": 6,
+        "name": "Dress the pasta",
+        "description": "Toss your pasta in a pan with the sauce you like and stir to combine all the ingredients.",
+        "countdown": 2,
+        "videoUrl": "TBD"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Small pizzas without yeast",
+    "source": "https://blog.giallozafferano.it/paola67/small-pizzas-without-yeast/",
+    "instructions": [
+      {
+        "id": 1,
+        "name": "Mix the ingredients",
+        "description": "In a large bowl (or in an electric mixer) combine self-rising flour, yogurt and a generous pinch of salt.",
+        "countdown": 3,
+        "videoUrl": "back-extension.webm"
+      },
+      {
+        "id": 2,
+        "name": "Knead the dough",
+        "description": "Knead until you have a smooth dough.",
+        "countdown": 2,
+        "videoUrl": "TBD"
+      },
+      {
+        "id": 3,
+        "name": "Cut the dough into circles",
+        "description": "Put some flour on your clean work surface and stretch the dough using a rolling pin. Then cut the dough into circles.",
+        "countdown": 2,
+        "videoUrl": "TBD"
+      },
+      {
+        "id": 4,
+        "name": "Prepare the circles",
+        "description": "Put these circles on a large baking sheet covered with baking paper.",
+        "countdown": 4,
+        "videoUrl": "TBD"
+      },
+      {
+        "id": 5,
+        "name": "Dress the circles",
+        "description": "Put on each circle a light layer of tomato puree and some pieces of mozzarella cheese. Sprinkle with oregano and add a drop of olive oil.",
+        "countdown": 3,
+        "videoUrl": "TBD"
+      },
+      {
+        "id": 6,
+        "name": "Bake",
+        "description": "Bake for about 15 minutes (exact cooking time depends on your oven) at 200°.",
+        "countdown": 5,
+        "videoUrl": "TBD"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Chocolate salami recipe",
+    "source": "https://blog.giallozafferano.it/paola67/chocolate-salami-recipe/",
+    "instructions": [
+      {
+        "id": 1,
+        "name": "Prepare the butter",
+        "description": "Let butter soften at room temperature.",
+        "countdown": 3,
+        "videoUrl": "seated-leg-press.webm"
+      },
+      {
+        "id": 2,
+        "name": "Chop the amaretti",
+        "description": "Coarsely chop the amaretti cookies and set aside.",
+        "countdown": 2,
+        "videoUrl": "TBD"
+      },
+      {
+        "id": 3,
+        "name": "Break the biscuits",
+        "description": "Break the biscuits into small pieces, but do not powder them (you can use a rolling pin, the back of a spoon or a meat tenderizer). Set aside.",
+        "countdown": 4,
+        "videoUrl": "TBD"
+      },
+      {
+        "id": 4,
+        "name": "Prepare the dough",
+        "description": "In a large bowl, put the eggs with the sugar.",
+        "countdown": 3,
+        "videoUrl": "TBD"
+      },
+      {
+        "id": 5,
+        "name": "Beat the eggs",
+        "description": "Beat them with an electric whisk until they turn pale yellow and foamy. Then add the softened butter.",
+        "countdown": 2,
+        "videoUrl": "TBD"
+      },
+      {
+        "id": 6,
+        "name": "Whisk",
+        "description": "Whisk for a few seconds.",
+        "countdown": 3,
+        "videoUrl": "TBD"
+      },
+      {
+        "id": 7,
+        "name": "Add the cocoa",
+        "description": "Sift the unsweetened cocoa powder through a fine mesh colander in order to get rid of any lumps.",
+        "countdown": 2,
+        "videoUrl": "TBD"
+      },
+      {
+        "id": 8,
+        "name": "Add the amaretti",
+        "description": "Add the amaretti cookies coarsely crushed.",
+        "countdown": 4,
+        "videoUrl": "TBD"
+      },
+      {
+        "id": 9,
+        "name": "Mix all",
+        "description": "Mix well with a spoon to combine all the ingredients.",
+        "countdown": 3,
+        "videoUrl": "TBD"
+      },
+      {
+        "id": 10,
+        "name": "Add the biscuits",
+        "description": "Gradually add the biscuits and work until all the crumbs are completely coated with the chocolate mixture.",
+        "countdown": 2,
+        "videoUrl": "TBD"
+      },
+      {
+        "id": 12,
+        "name": "Shape the mixture",
+        "description": "Shape this mixture into a log.",
+        "countdown": 3,
+        "videoUrl": "TBD"
+      },
+      {
+        "id": 13,
+        "name": "Wrap the mixture",
+        "description": "Wrap it in a cling film or baking paper.",
+        "countdown": 2,
+        "videoUrl": "TBD"
+      },
+      {
+        "id": 14,
+        "name": "Cool down the mixture and serve",
+        "description": "Put it in the fridge for a couple of hours, then cut the chocolate salami into slices and serve. (You can also freeze it).",
+        "countdown": 3,
+        "videoUrl": "TBD"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Bechamel sauce",
+    "source": "https://blog.giallozafferano.it/paola67/bechamel-sauce/",
+    "instructions": [
+      {
+        "id": 1,
+        "name": "Warm the milk",
+        "description": "Warm the milk in a small saucepan or in the microwave. Cover and set aside.",
+        "countdown": 3,
+        "videoUrl": "missing.video"
+      },
+      {
+        "id": 2,
+        "name": "Melt the butter",
+        "description": "Place the butter in another saucepan and melt it completely over medium heat. Make sure it does not brown.",
+        "countdown": 4,
+        "videoUrl": "TBD"
+      },
+      {
+        "id": 3,
+        "name": "Whisk the flour",
+        "description": "Add the sifted flour and continue whisking for 2/3 minutes until the butter-flour mixture turns to a golden colour.",
+        "countdown": 3,
+        "videoUrl": "TBD"
+      },
+      {
+        "id": 4,
+        "name": "Pour in milk",
+        "description": "Gradually pour in the warm milk (a little at a time).",
+        "countdown": 2,
+        "videoUrl": "TBD"
+      },
+      {
+        "id": 5,
+        "name": "Whisk the sauce",
+        "description": "Keep whisking for a few minutes so that no lumps form and your bechamel sauce is creamy.",
+        "countdown": 3,
+        "videoUrl": "TBD"
+      },
+      {
+        "id": 6,
+        "name": "Season",
+        "description": "Then season with salt and nutmeg. Stir again",
+        "countdown": 4,
+        "videoUrl": "TBD"
+      },
+      {
+        "id": 7,
+        "name": "Stir",
+        "description": "Stir again. Your bechamel sauce is ready.",
+        "countdown": 2,
+        "videoUrl": "TBD"
+      }
+    ]
+  }
+]
