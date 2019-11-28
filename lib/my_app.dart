@@ -1,4 +1,4 @@
-import 'package:cast_your_instructions_flutter/pages/my_home_page.dart';
+import 'package:cast_your_instructions_flutter/routes/routine_list_route.dart';
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Home Page'),
+      home: RoutineListRoute(title: 'Cast your Instructions'),
     );
   }
 }
