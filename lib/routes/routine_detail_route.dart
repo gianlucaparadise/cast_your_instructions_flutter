@@ -1,3 +1,6 @@
+import 'package:flutter_cast_framework/cast.dart';
+import 'package:flutter_cast_framework/widgets.dart';
+
 import '../models/routine.dart';
 import '../widgets/instruction_list_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,6 +21,12 @@ class _RoutineDetailRouteState extends State<RoutineDetailRoute> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Detail"),
+        actions: [
+          IconButton(
+            icon: CastIcon(),
+            onPressed: () => FlutterCastFramework.castContext.showCastChooserDialog(),
+          ),
+        ],
       ),
       body: Column(
         children: [

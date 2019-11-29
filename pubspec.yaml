@@ -26,6 +26,9 @@ dependencies:
 
   json_annotation: ^2.0.0
 
+  flutter_cast_framework:
+    path: ../flutter_cast_framework/ # this temporarily points to a local path until the lib will be public
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

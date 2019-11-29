@@ -6,6 +6,8 @@ import '../widgets/routine_list_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter_cast_framework/cast.dart';
+import 'package:flutter_cast_framework/widgets.dart';
 
 class RoutineListRoute extends StatefulWidget {
   RoutineListRoute({Key key, this.title}) : super(key: key);
@@ -30,6 +32,12 @@ class _RoutineListRouteState extends State<RoutineListRoute> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: [
+          IconButton(
+            icon: CastIcon(),
+            onPressed: () => FlutterCastFramework.castContext.showCastChooserDialog(),
+          ),
+        ],
       ),
       body: FutureBuilder<RoutineList>(
           future: loadStub(),
