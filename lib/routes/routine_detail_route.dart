@@ -1,5 +1,5 @@
-import 'package:cast_your_instructions_flutter/models/routine.dart';
-import 'package:cast_your_instructions_flutter/widgets/instruction_list_widget.dart';
+import '../models/routine.dart';
+import '../widgets/instruction_list_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

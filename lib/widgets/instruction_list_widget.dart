@@ -1,4 +1,4 @@
-import 'package:cast_your_instructions_flutter/models/routine.dart';
+import '../models/routine.dart';
 import 'package:flutter/material.dart';
 
 class InstructionListWidget extends StatelessWidget {

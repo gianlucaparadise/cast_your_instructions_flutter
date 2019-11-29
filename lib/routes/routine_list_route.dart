@@ -1,8 +1,8 @@
 import 'dart:convert' show json;
 
-import 'package:cast_your_instructions_flutter/models/routine.dart';
-import 'package:cast_your_instructions_flutter/routes/routine_detail_route.dart';
-import 'package:cast_your_instructions_flutter/widgets/routine_list_widget.dart';
+import '../models/routine.dart';
+import 'routine_detail_route.dart';
+import '../widgets/routine_list_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;

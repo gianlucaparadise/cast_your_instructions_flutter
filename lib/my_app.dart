@@ -1,4 +1,4 @@
-import 'package:cast_your_instructions_flutter/routes/routine_list_route.dart';
+import 'routes/routine_list_route.dart';
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {
