@@ -7,11 +7,12 @@ import 'models/cast_message.dart';
 import 'models/cast_message_response.dart';
 
 class CastManager {
-
   final _namespace = 'urn:x-cast:cast-your-instructions';
 
   final routine = ValueNotifier<Routine>(null);
   final lastSelectedInstruction = ValueNotifier<Instruction>(null);
+  final castConnectionState = ValueNotifier(CastConnectionState.NOT_CONNECTED);
+  final castPlayerState = ValueNotifier(CastPlayerState.UNLOADED);
 
   static CastManager _instance;
 
@@ -27,6 +28,8 @@ class CastManager {
     FlutterCastFramework.namespaces = [_namespace];
     FlutterCastFramework.castContext.sessionManager.onMessageReceived =
         _onMessageReceived;
+    FlutterCastFramework.castContext.sessionManager.state
+        .addListener(_onSessionStateChanged);
   }
 
   void load(Routine routine) {
@@ -70,7 +73,8 @@ class CastManager {
 
     debugPrint("onMessageReceived: $message");
 
-    CastMessageResponse responseMessage = CastMessageResponse.fromJsonString(message);
+    CastMessageResponse responseMessage =
+        CastMessageResponse.fromJsonString(message);
 
     debugPrint("onMessageReceived parse: ${responseMessage.routine?.title}");
 
@@ -79,25 +83,69 @@ class CastManager {
 
     switch (responseMessage.type) {
       case ResponseMessageType.LOADED:
-      // TODO: Handle this case.
+        castPlayerState.value = CastPlayerState.LOADED;
+        lastSelectedInstruction.value = null;
         break;
+
       case ResponseMessageType.PLAYED:
-      // TODO: Handle this case.
+        castPlayerState.value = CastPlayerState.PLAYING;
         break;
+
       case ResponseMessageType.PAUSED:
-      // TODO: Handle this case.
+        castPlayerState.value = CastPlayerState.PAUSED;
         break;
+
       case ResponseMessageType.STOPPED:
-      // TODO: Handle this case.
+        castPlayerState.value = CastPlayerState.STOPPED;
+        lastSelectedInstruction.value = null;
         break;
+
       case ResponseMessageType.SELECTED_INSTRUCTION:
         var selectedInstructionIndex = responseMessage.selectedInstructionIndex;
 
         if (selectedInstructionIndex < routine?.instructions?.length) {
           lastSelectedInstruction.value =
-          routine.instructions[selectedInstructionIndex];
+              routine.instructions[selectedInstructionIndex];
         }
         break;
     }
   }
+
+  void _onSessionStateChanged() {
+    switch (FlutterCastFramework.castContext.sessionManager.state.value) {
+      case SessionState.session_start_failed:
+      case SessionState.session_resume_failed:
+      case SessionState.session_ended:
+        castConnectionState.value = CastConnectionState.NOT_CONNECTED;
+        routine.value = null;
+        lastSelectedInstruction.value = null;
+        break;
+
+      case SessionState.session_started:
+      case SessionState.session_resumed:
+        castConnectionState.value = CastConnectionState.CONNECTED;
+        break;
+
+      case SessionState.idle:
+      case SessionState.session_starting:
+      case SessionState.session_ending:
+      case SessionState.session_resuming:
+      case SessionState.session_suspended:
+        // pass
+        break;
+    }
+  }
+}
+
+enum CastConnectionState {
+  NOT_CONNECTED,
+  CONNECTED,
+}
+
+enum CastPlayerState {
+  UNLOADED,
+  LOADED,
+  STOPPED,
+  PLAYING,
+  PAUSED,
 }
