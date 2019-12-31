@@ -26,8 +26,21 @@ dependencies:
 
   json_annotation: ^2.0.0
 
+  # flutter_cast_framework:
+  #   path: ../flutter_cast_framework/ # this points to a local path for testing purpose
+
   flutter_cast_framework:
-    path: ../flutter_cast_framework/ # this temporarily points to a local path until the lib will be public
+    git:
+      url: git://github.com/gianlucaparadise/flutter_cast_framework.git
+      ref: master
+
+  # flutter_local_notifications:
+  #   path: ../flutter_local_notifications/ # this points to a local path for testing purpose
+
+  flutter_local_notifications:
+    git:
+      url: git://github.com/gianlucaparadise/flutter_local_notifications.git
+      ref: master
 
 dev_dependencies:
   flutter_test:

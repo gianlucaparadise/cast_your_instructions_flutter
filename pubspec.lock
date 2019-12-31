@@ -163,10 +163,21 @@ packages:
   flutter_cast_framework:
     dependency: "direct main"
     description:
-      path: "../flutter_cast_framework"
-      relative: true
-    source: path
+      path: "."
+      ref: master
+      resolved-ref: "65eb6ffafc11dc30972e6653165b417bcc1ddcf6"
+      url: "git://github.com/gianlucaparadise/flutter_cast_framework.git"
+    source: git
     version: "0.0.1"
+  flutter_local_notifications:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: master
+      resolved-ref: "8472e65dff51bf38ba73d0b304ad06b6b69604ec"
+      url: "git://github.com/gianlucaparadise/flutter_local_notifications.git"
+    source: git
+    version: "0.8.4+3"
   flutter_svg:
     dependency: transitive
     description:
@@ -354,6 +365,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.4.0"
+  platform:
+    dependency: transitive
+    description:
+      name: platform
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.1"
   pool:
     dependency: transitive
     description:
