@@ -56,14 +56,14 @@ class CastManager {
     try {
       var sessionManager = FlutterCastFramework.castContext.sessionManager;
       if (sessionManager == null) {
-        debugPrint("No session");
+        debugPrint("CastManager: No session");
         return;
       }
 
       var messageString = message.toJsonString();
       sessionManager.sendMessage(_namespace, messageString);
     } on Exception catch (ex) {
-      debugPrint("Error while sending ${message.type}:");
+      debugPrint("CastManager: Error while sending ${message.type}:");
       debugPrint(ex.toString());
     }
   }
@@ -71,12 +71,12 @@ class CastManager {
   void _onMessageReceived(String namespace, String message) {
     if (message == null) return;
 
-    debugPrint("onMessageReceived: $message");
+    debugPrint("CastManager: onMessageReceived: $message");
 
     CastMessageResponse responseMessage =
         CastMessageResponse.fromJsonString(message);
 
-    debugPrint("onMessageReceived parse: ${responseMessage.routine?.title}");
+    debugPrint("CastManager: onMessageReceived parse: ${responseMessage.routine?.title}");
 
     var routine = responseMessage.routine;
     this.routine.value = responseMessage.routine;

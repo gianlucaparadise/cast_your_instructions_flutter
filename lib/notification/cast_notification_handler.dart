@@ -16,7 +16,7 @@ class CastNotificationHandler with WidgetsBindingObserver {
   final int notificationId = 7;
 
   bool _isInitialized = false;
-  bool isAppInBackground = false; // TODO: how to evaluate this?
+  bool isAppInBackground = false;
 
   static CastNotificationHandler get instance {
     if (_instance == null) {
@@ -100,10 +100,11 @@ class CastNotificationHandler with WidgetsBindingObserver {
   }
 
   Future<void> _showNotification() async {
-    // I can show the notification only when is connected and is in background
+    // I can show the notification only when app is in background
     if (!isAppInBackground) return;
-    if (CastManager.instance.castConnectionState.value !=
-        CastConnectionState.CONNECTED) return;
+
+    // I can show the notification only when a routine has been loaded
+    if (CastManager.instance.castPlayerState.value == CastPlayerState.UNLOADED) return;
 
     var mediaStyleInformation = MediaStyleInformation(
       showActionsInCompactView: [0],
