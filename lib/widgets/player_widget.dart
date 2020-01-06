@@ -1,5 +1,6 @@
-import 'package:cast_your_instructions_flutter/cast/cast_manager.dart';
+import '../cast/cast_state.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PlayerWidget extends StatelessWidget {
   PlayerWidget({
@@ -10,30 +11,33 @@ class PlayerWidget extends StatelessWidget {
   final PlayPauseStateValue playPauseState;
   final String title;
 
-  void _onPlayPressed() {
-    CastManager.instance.play();
+  void _onPlayPressed(BuildContext context) {
+    var castState = Provider.of<CastState>(context, listen: false);
+    castState.play();
   }
 
-  void _onPausePressed() {
-    CastManager.instance.pause();
+  void _onPausePressed(BuildContext context) {
+    var castState = Provider.of<CastState>(context, listen: false);
+    castState.pause();
   }
 
-  void _onStopPressed() {
-    CastManager.instance.stop();
+  void _onStopPressed(BuildContext context) {
+    var castState = Provider.of<CastState>(context, listen: false);
+    castState.stop();
   }
 
-  IconButton _getPlayPauseButton() {
+  IconButton _getPlayPauseButton(BuildContext context) {
     if (playPauseState == PlayPauseStateValue.Play) {
       return IconButton(
         icon: Icon(Icons.play_arrow),
-        onPressed: _onPlayPressed,
+        onPressed: () => _onPlayPressed(context),
       );
     }
 
     if (playPauseState == PlayPauseStateValue.Pause) {
       return IconButton(
         icon: Icon(Icons.pause),
-        onPressed: _onPausePressed,
+        onPressed: () => _onPausePressed(context),
       );
     }
 
@@ -56,10 +60,10 @@ class PlayerWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _getPlayPauseButton(),
+            _getPlayPauseButton(context),
             IconButton(
               icon: Icon(Icons.stop),
-              onPressed: _onStopPressed,
+              onPressed: () => _onStopPressed(context),
             ),
           ],
         ),

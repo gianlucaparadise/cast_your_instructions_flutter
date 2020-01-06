@@ -1,11 +1,9 @@
-import 'package:cast_your_instructions_flutter/cast/cast_manager.dart';
+import '../cast/cast_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class CastNotificationHandler with WidgetsBindingObserver {
-  static CastNotificationHandler _instance;
-
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
@@ -15,25 +13,12 @@ class CastNotificationHandler with WidgetsBindingObserver {
   final String channelId = "cast:instruction:player:channel";
   final int notificationId = 7;
 
-  bool _isInitialized = false;
   bool isAppInBackground = false;
 
-  static CastNotificationHandler get instance {
-    if (_instance == null) {
-      _instance = CastNotificationHandler._internal();
-    }
+  CastState lastCastState;
 
-    return _instance;
-  }
-
-  CastNotificationHandler._internal() {
-    debugPrint("CastNotificationHandler constructed");
-  }
-
-  Future<void> init() async {
-    if (this._isInitialized) return;
+  CastNotificationHandler() {
     debugPrint("CastNotificationHandler init");
-    this._isInitialized = true;
 
     try {
       //region FlutterLocalNotification plugin init
@@ -46,7 +31,8 @@ class CastNotificationHandler with WidgetsBindingObserver {
       var initializationSettings = InitializationSettings(
           initializationSettingsAndroid, initializationSettingsIOS);
 
-      await flutterLocalNotificationsPlugin.initialize(
+      // FIXME: I should await the initialization, but it would make my code complex
+      flutterLocalNotificationsPlugin.initialize(
         initializationSettings,
         onSelectNotification: _onSelectNotification,
         onNotificationActionTapped: _onNotificationActionTapped,
@@ -55,18 +41,46 @@ class CastNotificationHandler with WidgetsBindingObserver {
 
       // this is to listen to background/foreground
       WidgetsBinding.instance.addObserver(this);
-
-      CastManager.instance.castPlayerState
-          .addListener(_onCastPlayerStateChanged);
-      CastManager.instance.castConnectionState
-          .addListener(_onCastConnectionStateChanged);
-      CastManager.instance.lastSelectedInstruction
-          .addListener(_onLastSelectedInstructionChanged);
     } catch (exception) {
       debugPrint(
           "CastNotificationHandler: Error while initialization:\n${exception.toString()}");
-      this._isInitialized = false;
     }
+  }
+
+  void onCastStateUpdated(CastState castState) {
+    debugPrint("CastNotificationHandler: onCastStateUpdated");
+    lastCastState = castState;
+
+    CastConnectionState castConnectionState = castState.castConnectionState;
+
+    switch (castConnectionState) {
+      case CastConnectionState.NOT_CONNECTED:
+        _cancelNotification();
+        return;
+
+      case CastConnectionState.CONNECTED:
+        // pass: I will decide later what to do
+        break;
+    }
+
+    CastPlayerState castPlayerState = castState.castPlayerState;
+
+    switch (castPlayerState) {
+      case CastPlayerState.LOADED:
+      case CastPlayerState.PLAYING:
+      case CastPlayerState.PAUSED:
+        _showNotification(castState);
+        break;
+      case CastPlayerState.STOPPED:
+      case CastPlayerState.UNLOADED:
+        _cancelNotification();
+        break;
+    }
+  }
+
+  void _onCastUpdatedBackground() {
+    debugPrint("CastNotificationHandler: _onCastUpdatedBackground");
+    onCastStateUpdated(lastCastState);
   }
 
   Future<void> _onDidReceiveLocalNotification(
@@ -92,19 +106,32 @@ class CastNotificationHandler with WidgetsBindingObserver {
     debugPrint("CastNotificationHandler didChangeAppLifecycleState $state");
     if (state == AppLifecycleState.paused) {
       isAppInBackground = true;
-      _showNotification();
+
+      // When in background, I don't get notified through the Provider anymore,
+      // therefore I need to attach to listener
+      // FIXME: I don't like very much this approach, but Provider helps me removing the singletons
+
+      lastCastState.addListener(_onCastUpdatedBackground);
+      _onCastUpdatedBackground();
+
     } else if (state == AppLifecycleState.resumed) {
       isAppInBackground = false;
+
+      // Once in foreground, I get notified through the Provider,
+      // therefore I can remove my listener
+
+      lastCastState.removeListener(_onCastUpdatedBackground);
       _cancelNotification();
+
     }
   }
 
-  Future<void> _showNotification() async {
+  Future<void> _showNotification(CastState castState) async {
     // I can show the notification only when app is in background
     if (!isAppInBackground) return;
 
     // I can show the notification only when a routine has been loaded
-    if (CastManager.instance.castPlayerState.value == CastPlayerState.UNLOADED) return;
+    if (castState.castPlayerState == CastPlayerState.UNLOADED) return;
 
     var mediaStyleInformation = MediaStyleInformation(
       showActionsInCompactView: [0],
@@ -125,7 +152,7 @@ class CastNotificationHandler with WidgetsBindingObserver {
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
     List<NotificationAction> actions = [];
-    if (CastManager.instance.castPlayerState.value == CastPlayerState.PLAYING) {
+    if (castState.castPlayerState == CastPlayerState.PLAYING) {
       actions.add(NotificationAction(
         icon: 'baseline_pause_black_18dp',
         title: 'Pause',
@@ -146,13 +173,12 @@ class CastNotificationHandler with WidgetsBindingObserver {
       actionKey: 'PLAYER_STOP',
     ));
 
-    var title = CastManager.instance.routine?.value?.title;
-    var instructionName = CastManager
-        .instance.lastSelectedInstruction?.value?.name; // FIXME: this is empty
+    var title = castState.routine?.title;
+    var instructionName = castState.lastSelectedInstruction?.name; // FIXME: this is empty
 
     debugPrint("InstructionsName: $instructionName");
     debugPrint(
-        "LastSelectedInstruction: ${CastManager.instance.lastSelectedInstruction}");
+        "LastSelectedInstruction: ${castState.lastSelectedInstruction}");
 
     await flutterLocalNotificationsPlugin.show(
       notificationId,
@@ -166,40 +192,4 @@ class CastNotificationHandler with WidgetsBindingObserver {
   Future<void> _cancelNotification() async {
     await flutterLocalNotificationsPlugin.cancel(notificationId);
   }
-
-  //region CastManager lifecycle listeners
-  void _onCastPlayerStateChanged() {
-    CastPlayerState state = CastManager.instance.castPlayerState.value;
-
-    switch (state) {
-      case CastPlayerState.LOADED:
-      case CastPlayerState.PLAYING:
-      case CastPlayerState.PAUSED:
-        _showNotification();
-        break;
-      case CastPlayerState.STOPPED:
-      case CastPlayerState.UNLOADED:
-        _cancelNotification();
-        break;
-    }
-  }
-
-  void _onCastConnectionStateChanged() {
-    CastConnectionState state = CastManager.instance.castConnectionState.value;
-
-    switch (state) {
-      case CastConnectionState.NOT_CONNECTED:
-        _cancelNotification();
-        break;
-      case CastConnectionState.CONNECTED:
-        // pass
-        break;
-    }
-  }
-
-  void _onLastSelectedInstructionChanged() {
-    debugPrint("CastNotificationHandler _onLastSelectedInstructionChanged");
-    _showNotification();
-  }
-  //endregion
 }

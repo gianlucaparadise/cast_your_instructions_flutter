@@ -1,6 +1,7 @@
-import 'package:cast_your_instructions_flutter/cast/cast_manager.dart';
+import 'package:cast_your_instructions_flutter/cast/cast_state.dart' as CastStateModel;
 import 'package:flutter_cast_framework/cast.dart';
 import 'package:flutter_cast_framework/widgets.dart';
+import 'package:provider/provider.dart';
 
 import '../models/routine.dart';
 import '../widgets/instruction_list_widget.dart';
@@ -17,7 +18,8 @@ class RoutineDetailRoute extends StatefulWidget {
 
 class _RoutineDetailRouteState extends State<RoutineDetailRoute> {
   void _onCastPressed() {
-    CastManager.instance.load(widget.routine);
+    CastStateModel.CastState castState = Provider.of<CastStateModel.CastState>(context, listen: false);
+    castState.load(widget.routine);
   }
 
   @override

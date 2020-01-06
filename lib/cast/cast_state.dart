@@ -1,30 +1,26 @@
-import 'package:flutter/foundation.dart';
-
-import '../models/routine.dart';
-import 'package:flutter_cast_framework/cast.dart';
-
 import 'models/cast_message.dart';
 import 'models/cast_message_response.dart';
+import '../models/routine.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_cast_framework/cast.dart';
 
-class CastManager {
+class CastState extends ChangeNotifier {
   final _namespace = 'urn:x-cast:cast-your-instructions';
 
-  final routine = ValueNotifier<Routine>(null);
-  final lastSelectedInstruction = ValueNotifier<Instruction>(null);
-  final castConnectionState = ValueNotifier(CastConnectionState.NOT_CONNECTED);
-  final castPlayerState = ValueNotifier(CastPlayerState.UNLOADED);
+  Routine _routine;
+  Routine get routine => _routine;
 
-  static CastManager _instance;
+  Instruction _lastSelectedInstruction;
+  Instruction get lastSelectedInstruction => _lastSelectedInstruction;
 
-  static CastManager get instance {
-    if (_instance == null) {
-      _instance = CastManager._internal();
-    }
+  CastConnectionState _castConnectionState = CastConnectionState.NOT_CONNECTED;
+  CastConnectionState get castConnectionState => _castConnectionState;
 
-    return _instance;
-  }
+  CastPlayerState _castPlayerState = CastPlayerState.UNLOADED;
+  CastPlayerState get castPlayerState => _castPlayerState;
 
-  CastManager._internal() {
+  CastState() {
+    debugPrint("CastState: constructed");
     FlutterCastFramework.namespaces = [_namespace];
     FlutterCastFramework.castContext.sessionManager.onMessageReceived =
         _onMessageReceived;
@@ -56,14 +52,14 @@ class CastManager {
     try {
       var sessionManager = FlutterCastFramework.castContext.sessionManager;
       if (sessionManager == null) {
-        debugPrint("CastManager: No session");
+        debugPrint("CastState: No session");
         return;
       }
 
       var messageString = message.toJsonString();
       sessionManager.sendMessage(_namespace, messageString);
     } on Exception catch (ex) {
-      debugPrint("CastManager: Error while sending ${message.type}:");
+      debugPrint("CastState: Error while sending ${message.type}:");
       debugPrint(ex.toString());
     }
   }
@@ -71,44 +67,47 @@ class CastManager {
   void _onMessageReceived(String namespace, String message) {
     if (message == null) return;
 
-    debugPrint("CastManager: onMessageReceived: $message");
+    debugPrint("CastState: onMessageReceived: $message");
 
     CastMessageResponse responseMessage =
         CastMessageResponse.fromJsonString(message);
 
-    debugPrint("CastManager: onMessageReceived parse: ${responseMessage.routine?.title}");
+    debugPrint(
+        "CastState: onMessageReceived parse: ${responseMessage.routine?.title}");
 
     var routine = responseMessage.routine;
-    this.routine.value = responseMessage.routine;
+    _routine = responseMessage.routine;
 
     switch (responseMessage.type) {
       case ResponseMessageType.LOADED:
-        castPlayerState.value = CastPlayerState.LOADED;
-        lastSelectedInstruction.value = null;
+        _castPlayerState = CastPlayerState.LOADED;
+        _lastSelectedInstruction = null;
         break;
 
       case ResponseMessageType.PLAYED:
-        castPlayerState.value = CastPlayerState.PLAYING;
+        _castPlayerState = CastPlayerState.PLAYING;
         break;
 
       case ResponseMessageType.PAUSED:
-        castPlayerState.value = CastPlayerState.PAUSED;
+        _castPlayerState = CastPlayerState.PAUSED;
         break;
 
       case ResponseMessageType.STOPPED:
-        castPlayerState.value = CastPlayerState.STOPPED;
-        lastSelectedInstruction.value = null;
+        _castPlayerState = CastPlayerState.STOPPED;
+        _lastSelectedInstruction = null;
         break;
 
       case ResponseMessageType.SELECTED_INSTRUCTION:
         var selectedInstructionIndex = responseMessage.selectedInstructionIndex;
 
         if (selectedInstructionIndex < routine?.instructions?.length) {
-          lastSelectedInstruction.value =
+          _lastSelectedInstruction =
               routine.instructions[selectedInstructionIndex];
         }
         break;
     }
+
+    notifyListeners();
   }
 
   void _onSessionStateChanged() {
@@ -116,14 +115,14 @@ class CastManager {
       case SessionState.session_start_failed:
       case SessionState.session_resume_failed:
       case SessionState.session_ended:
-        castConnectionState.value = CastConnectionState.NOT_CONNECTED;
-        routine.value = null;
-        lastSelectedInstruction.value = null;
+        _castConnectionState = CastConnectionState.NOT_CONNECTED;
+        _routine = null;
+        _lastSelectedInstruction = null;
         break;
 
       case SessionState.session_started:
       case SessionState.session_resumed:
-        castConnectionState.value = CastConnectionState.CONNECTED;
+        _castConnectionState = CastConnectionState.CONNECTED;
         break;
 
       case SessionState.idle:
@@ -131,9 +130,10 @@ class CastManager {
       case SessionState.session_ending:
       case SessionState.session_resuming:
       case SessionState.session_suspended:
-        // pass
-        break;
+        return;
     }
+
+    notifyListeners();
   }
 }
 
