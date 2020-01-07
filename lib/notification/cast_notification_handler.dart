@@ -13,6 +13,10 @@ class CastNotificationHandler with WidgetsBindingObserver {
   final String channelId = "cast:instruction:player:channel";
   final int notificationId = 7;
 
+  static const String actionPlayerPause = "PLAYER_PAUSE";
+  static const String actionPlayerPlay = "PLAYER_PLAY";
+  static const String actionPlayerStop = "PLAYER_STOP";
+
   bool isAppInBackground = false;
 
   CastState lastCastState;
@@ -99,6 +103,21 @@ class CastNotificationHandler with WidgetsBindingObserver {
   Future<void> _onNotificationActionTapped(
       String actionKey, Map<String, String> extras) async {
     debugPrint("CastNotificationHandler: onNotificationActionTapped");
+    switch (actionKey) {
+      case actionPlayerPause:
+        lastCastState.pause();
+        break;
+      case actionPlayerPlay:
+        lastCastState.play();
+        break;
+      case actionPlayerStop:
+        lastCastState.stop();
+        break;
+
+      default:
+        debugPrint("CastNotificationHandler: unhandled case $actionKey");
+        break;
+    }
   }
 
   @override
