@@ -22,6 +22,23 @@ class _RoutineDetailRouteState extends State<RoutineDetailRoute> {
     castState.load(widget.routine);
   }
 
+  Widget _getCastButtonForCastManager(CastManager castManager) {
+    // When connected I return an enabled button
+    // When disconnected I return a disabled button
+
+    if (castManager.castConnectionState == CastConnectionState.CONNECTED) {
+      return RaisedButton(
+        child: Text('Cast'),
+        onPressed: _onCastPressed,
+      );
+    }
+
+    return RaisedButton(
+      child: Text('Cast'),
+      onPressed: null, // when click is null, button is disabled
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +58,8 @@ class _RoutineDetailRouteState extends State<RoutineDetailRoute> {
             children: [
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(bottom: 16, left: 16, top: 16, right: 8),
+                  padding:
+                      EdgeInsets.only(bottom: 16, left: 16, top: 16, right: 8),
                   child: Text(
                     widget.routine.title,
                     style: Theme.of(context).textTheme.headline,
@@ -50,10 +68,10 @@ class _RoutineDetailRouteState extends State<RoutineDetailRoute> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: 16, left: 8, top: 16, right: 16),
-                child: RaisedButton(
-                  child: Text('Cast'),
-                  onPressed: _onCastPressed,
+                padding:
+                    EdgeInsets.only(bottom: 16, left: 8, top: 16, right: 16),
+                child: Consumer<CastManager>(
+                  builder: (context, castManager, child) => _getCastButtonForCastManager(castManager),
                 ),
               ),
             ],
