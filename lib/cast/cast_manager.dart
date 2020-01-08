@@ -4,7 +4,7 @@ import '../models/routine.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_cast_framework/cast.dart';
 
-class CastState extends ChangeNotifier {
+class CastManager extends ChangeNotifier {
   final _namespace = 'urn:x-cast:cast-your-instructions';
 
   Routine _routine;
@@ -19,7 +19,7 @@ class CastState extends ChangeNotifier {
   CastPlayerState _castPlayerState = CastPlayerState.UNLOADED;
   CastPlayerState get castPlayerState => _castPlayerState;
 
-  CastState() {
+  CastManager() {
     debugPrint("CastState: constructed");
     FlutterCastFramework.namespaces = [_namespace];
     FlutterCastFramework.castContext.sessionManager.onMessageReceived =

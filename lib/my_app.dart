@@ -2,7 +2,7 @@ import 'package:cast_your_instructions_flutter/notification/cast_notification_ha
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'cast/cast_state.dart';
+import 'cast/cast_manager.dart';
 import 'routes/routine_list_route.dart';
 import './routes/bottom_route.dart';
 
@@ -13,9 +13,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => CastState(),
+          create: (context) => CastManager(),
         ),
-        ProxyProvider<CastState, CastNotificationHandler>(
+        ProxyProvider<CastManager, CastNotificationHandler>(
           create: (context) => CastNotificationHandler(),
           update: (context, castState, castNotificationHandler) {
             castNotificationHandler.onCastStateUpdated(castState);

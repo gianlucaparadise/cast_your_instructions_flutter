@@ -1,4 +1,4 @@
-import '../cast/cast_state.dart';
+import '../cast/cast_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -19,7 +19,7 @@ class CastNotificationHandler with WidgetsBindingObserver {
 
   bool isAppInBackground = false;
 
-  CastState lastCastState;
+  CastManager lastCastState;
 
   CastNotificationHandler() {
     debugPrint("CastNotificationHandler init");
@@ -51,7 +51,7 @@ class CastNotificationHandler with WidgetsBindingObserver {
     }
   }
 
-  void onCastStateUpdated(CastState castState) {
+  void onCastStateUpdated(CastManager castState) {
     debugPrint("CastNotificationHandler: onCastStateUpdated");
     lastCastState = castState;
 
@@ -145,7 +145,7 @@ class CastNotificationHandler with WidgetsBindingObserver {
     }
   }
 
-  Future<void> _showNotification(CastState castState) async {
+  Future<void> _showNotification(CastManager castState) async {
     // I can show the notification only when app is in background
     if (!isAppInBackground) return;
 

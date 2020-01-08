@@ -1,11 +1,11 @@
 import 'package:provider/provider.dart';
-import '../cast/cast_state.dart';
+import '../cast/cast_manager.dart';
 import '../widgets/player_widget.dart';
 import 'package:flutter/material.dart';
 
 /// I know currently this is not a route, but this can become it
 class BottomRoute extends StatelessWidget {
-  bool isPlayerVisibleForState(CastState castState) {
+  bool isPlayerVisibleForState(CastManager castState) {
     switch (castState.castConnectionState) {
       case CastConnectionState.CONNECTED:
         return true;
@@ -16,7 +16,7 @@ class BottomRoute extends StatelessWidget {
     return false;
   }
 
-  bool canPlayForState(CastState castState) {
+  bool canPlayForState(CastManager castState) {
     switch (castState.castPlayerState) {
       case CastPlayerState.LOADED:
       case CastPlayerState.STOPPED:
@@ -34,7 +34,7 @@ class BottomRoute extends StatelessWidget {
     return true; // When in doubt, I want the play button
   }
 
-  String getPlayerTitleForState(CastState castState) {
+  String getPlayerTitleForState(CastManager castState) {
     var routine = castState.routine;
     if (routine?.title == null) return '';
 
@@ -44,7 +44,7 @@ class BottomRoute extends StatelessWidget {
         "${selectedInstruction?.name != null ? ": ${selectedInstruction?.name}" : ""}";
   }
 
-  Widget _getPlayer(CastState castState) {
+  Widget _getPlayer(CastManager castState) {
     bool isPlayerVisible = isPlayerVisibleForState(castState);
     if (!isPlayerVisible) return Container();
 
@@ -64,7 +64,7 @@ class BottomRoute extends StatelessWidget {
       color: Colors.blue,
       child: Directionality(
         textDirection: TextDirection.ltr,
-        child: Consumer<CastState>(
+        child: Consumer<CastManager>(
             builder: (context, castState, child) => _getPlayer(castState)),
       ),
     );

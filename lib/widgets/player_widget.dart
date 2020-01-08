@@ -1,4 +1,4 @@
-import '../cast/cast_state.dart';
+import '../cast/cast_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,17 +12,17 @@ class PlayerWidget extends StatelessWidget {
   final String title;
 
   void _onPlayPressed(BuildContext context) {
-    var castState = Provider.of<CastState>(context, listen: false);
+    var castState = Provider.of<CastManager>(context, listen: false);
     castState.play();
   }
 
   void _onPausePressed(BuildContext context) {
-    var castState = Provider.of<CastState>(context, listen: false);
+    var castState = Provider.of<CastManager>(context, listen: false);
     castState.pause();
   }
 
   void _onStopPressed(BuildContext context) {
-    var castState = Provider.of<CastState>(context, listen: false);
+    var castState = Provider.of<CastManager>(context, listen: false);
     castState.stop();
   }
 
