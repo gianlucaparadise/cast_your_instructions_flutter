@@ -71,15 +71,18 @@ class _RoutineDetailRouteState extends State<RoutineDetailRoute> {
                 padding:
                     EdgeInsets.only(bottom: 16, left: 8, top: 16, right: 16),
                 child: Consumer<CastManager>(
-                  builder: (context, castManager, child) => _getCastButtonForCastManager(castManager),
+                  builder: (context, castManager, child) =>
+                      _getCastButtonForCastManager(castManager),
                 ),
               ),
             ],
           ),
           Expanded(
-              child: InstructionListWidget(
-            instructions: widget.routine.instructions,
-          ))
+            child: InstructionListWidget(
+              routine: widget.routine,
+              instructions: widget.routine.instructions,
+            ),
+          ),
         ],
       ),
     );
