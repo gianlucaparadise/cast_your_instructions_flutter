@@ -38,10 +38,10 @@ dependencies:
   # flutter_local_notifications:
   #   path: ../flutter_local_notifications/ # this points to a local path for testing purpose
 
-  flutter_local_notifications:
-    git:
-      url: git://github.com/gianlucaparadise/flutter_local_notifications.git
-      ref: master
+  # flutter_local_notifications:
+  #   git:
+  #     url: git://github.com/gianlucaparadise/flutter_local_notifications.git
+  #     ref: master
 
 dev_dependencies:
   flutter_test:
