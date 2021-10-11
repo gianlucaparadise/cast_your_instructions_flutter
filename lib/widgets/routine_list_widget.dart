@@ -5,9 +5,9 @@ import '../models/routine.dart';
 import 'package:flutter/material.dart';
 
 class RoutineListWidget extends StatelessWidget {
-  RoutineListWidget({this.routineList, this.onTap});
+  RoutineListWidget({required this.routineList, required this.onTap});
 
-  final RoutineList routineList;
+  final List<Routine> routineList;
   final Function(Routine) onTap;
 
   Widget _getListTileForCastManager(CastManager castManager, Routine routine) {
@@ -25,16 +25,16 @@ class RoutineListWidget extends StatelessWidget {
 
     return ListTile(
       title: textTitle,
-      onTap: () => onTap?.call(routine),
+      onTap: () => onTap.call(routine),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: routineList.routines.length,
+        itemCount: routineList.length,
         itemBuilder: (context, index) {
-          Routine routine = routineList.routines[index];
+          Routine routine = routineList[index];
           return Consumer<CastManager>(
             builder: (context, castManager, child) =>
                 _getListTileForCastManager(castManager, routine),

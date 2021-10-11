@@ -26,7 +26,7 @@ class PlayerWidget extends StatelessWidget {
     castState.stop();
   }
 
-  IconButton _getPlayPauseButton(BuildContext context) {
+  Widget _getPlayPauseButton(BuildContext context) {
     if (playPauseState == PlayPauseStateValue.Play) {
       return IconButton(
         icon: Icon(Icons.play_arrow),
@@ -43,7 +43,7 @@ class PlayerWidget extends StatelessWidget {
 
     debugPrint('playPauseState not handled: $playPauseState');
 
-    return null;
+    return SizedBox.shrink(); // Empty view
   }
 
   @override

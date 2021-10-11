@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:json_annotation/json_annotation.dart';
@@ -9,8 +8,8 @@ part 'cast_message.g.dart';
 
 @JsonSerializable()
 class CastMessage {
-  MessageType type;
-  Routine routine;
+  MessageType? type;
+  Routine? routine;
 
   CastMessage(this.type, [this.routine]);
 

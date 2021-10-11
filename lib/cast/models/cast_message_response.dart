@@ -8,9 +8,9 @@ part 'cast_message_response.g.dart';
 
 @JsonSerializable()
 class CastMessageResponse {
-  ResponseMessageType type;
-  Routine routine;
-  int selectedInstructionIndex;
+  ResponseMessageType? type;
+  Routine? routine;
+  int? selectedInstructionIndex;
 
   CastMessageResponse({this.type, this.routine, this.selectedInstructionIndex});
 

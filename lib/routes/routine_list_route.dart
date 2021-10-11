@@ -10,7 +10,7 @@ import 'package:flutter_cast_framework/cast.dart';
 import 'package:flutter_cast_framework/widgets.dart';
 
 class RoutineListRoute extends StatefulWidget {
-  RoutineListRoute({Key key, this.title}) : super(key: key);
+  RoutineListRoute({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -35,7 +35,8 @@ class _RoutineListRouteState extends State<RoutineListRoute> {
         actions: [
           IconButton(
             icon: CastIcon(),
-            onPressed: () => FlutterCastFramework.castContext.showCastChooserDialog(),
+            onPressed: () =>
+                FlutterCastFramework.castContext.showCastChooserDialog(),
           ),
         ],
       ),
@@ -51,12 +52,19 @@ class _RoutineListRouteState extends State<RoutineListRoute> {
               return Center(child: CircularProgressIndicator());
             }
 
+            var routineList = snapshot.data?.routines;
+            if (routineList == null) {
+              return SizedBox.shrink(); // Empty view
+            }
+
             return RoutineListWidget(
-              routineList: snapshot.data,
+              routineList: routineList,
               onTap: (routine) {
-                Navigator.push(context, CupertinoPageRoute(
-                  builder: (context) => RoutineDetailRoute(routine: routine)
-                ));
+                Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                        builder: (context) =>
+                            RoutineDetailRoute(routine: routine)));
               },
             );
           }),

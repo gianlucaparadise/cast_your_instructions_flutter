@@ -15,10 +15,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => CastManager(),
         ),
-        ProxyProvider<CastManager, CastNotificationHandler>(
+        ProxyProvider<CastManager, CastNotificationHandler?>(
           create: (context) => CastNotificationHandler(),
           update: (context, castState, castNotificationHandler) {
-            castNotificationHandler.onCastStateUpdated(castState);
+            castNotificationHandler?.onCastStateUpdated(castState);
             return castNotificationHandler;
           },
           lazy: false, // This needs to be created on app start

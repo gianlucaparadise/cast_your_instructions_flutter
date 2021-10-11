@@ -8,7 +8,7 @@ import '../widgets/instruction_list_widget.dart';
 import 'package:flutter/material.dart';
 
 class RoutineDetailRoute extends StatefulWidget {
-  RoutineDetailRoute({this.routine});
+  RoutineDetailRoute({required this.routine});
 
   final Routine routine;
 
@@ -27,15 +27,28 @@ class _RoutineDetailRouteState extends State<RoutineDetailRoute> {
     // When disconnected I return a disabled button
 
     if (castManager.castConnectionState == CastConnectionState.CONNECTED) {
-      return RaisedButton(
+      return ElevatedButton(
         child: Text('Cast'),
         onPressed: _onCastPressed,
       );
     }
 
-    return RaisedButton(
+    return ElevatedButton(
       child: Text('Cast'),
       onPressed: null, // when click is null, button is disabled
+    );
+  }
+
+  Widget _getInstructionList() {
+    var instructions = widget.routine.instructions;
+
+    if (instructions == null) return SizedBox.shrink(); // Empty view
+
+    return Expanded(
+      child: InstructionListWidget(
+        routine: widget.routine,
+        instructions: instructions,
+      ),
     );
   }
 
@@ -61,8 +74,8 @@ class _RoutineDetailRouteState extends State<RoutineDetailRoute> {
                   padding:
                       EdgeInsets.only(bottom: 16, left: 16, top: 16, right: 8),
                   child: Text(
-                    widget.routine.title,
-                    style: Theme.of(context).textTheme.headline,
+                    "${widget.routine.title}",
+                    style: Theme.of(context).textTheme.headline5,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -77,12 +90,7 @@ class _RoutineDetailRouteState extends State<RoutineDetailRoute> {
               ),
             ],
           ),
-          Expanded(
-            child: InstructionListWidget(
-              routine: widget.routine,
-              instructions: widget.routine.instructions,
-            ),
-          ),
+          _getInstructionList()
         ],
       ),
     );

@@ -4,11 +4,11 @@ part 'routine.g.dart';
 
 @JsonSerializable()
 class Instruction {
-  int id;
-  String name;
-  String description;
-  int countdown;
-  String videoUrl;
+  int? id;
+  String? name;
+  String? description;
+  int? countdown;
+  String? videoUrl;
 
   Instruction(
       {this.id, this.name, this.description, this.countdown, this.videoUrl});
@@ -21,10 +21,10 @@ class Instruction {
 
 @JsonSerializable()
 class Routine {
-  int id;
-  String title;
-  String source;
-  List<Instruction> instructions;
+  int? id;
+  String? title;
+  String? source;
+  List<Instruction>? instructions;
 
   Routine({this.id, this.title, this.source, this.instructions});
 
@@ -36,7 +36,7 @@ class Routine {
 
 @JsonSerializable()
 class RoutineList {
-  List<Routine> routines;
+  List<Routine>? routines;
 
   RoutineList({this.routines});
 

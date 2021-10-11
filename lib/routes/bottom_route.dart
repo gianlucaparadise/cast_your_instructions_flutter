@@ -40,7 +40,7 @@ class BottomRoute extends StatelessWidget {
 
     var selectedInstruction = castState.lastSelectedInstruction;
 
-    return '${routine.title}'
+    return '${routine?.title}'
         "${selectedInstruction?.name != null ? ": ${selectedInstruction?.name}" : ""}";
   }
 

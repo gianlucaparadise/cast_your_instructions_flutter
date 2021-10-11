@@ -14,7 +14,7 @@ description: Cast your Instructions
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -22,10 +22,10 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
+  cupertino_icons: ^1.0.3
 
-  json_annotation: ^2.0.0
-  provider: ^4.0.1
+  json_annotation: ^4.1.0
+  provider: ^6.0.1
 
   # flutter_cast_framework:
   #   path: ../flutter_cast_framework/ # this points to a local path for testing purpose
@@ -47,8 +47,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  build_runner: ^1.0.0
-  json_serializable: ^2.0.0
+  build_runner: ^2.1.4
+  json_serializable: ^5.0.2
 
 
 # For information on the generic Dart part of this file, see the

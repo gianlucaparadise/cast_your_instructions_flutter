@@ -5,7 +5,7 @@ import '../models/routine.dart';
 import 'package:flutter/material.dart';
 
 class InstructionListWidget extends StatelessWidget {
-  InstructionListWidget({this.routine, this.instructions});
+  InstructionListWidget({required this.routine, required this.instructions});
 
   final Routine routine;
   final List<Instruction> instructions;
@@ -15,14 +15,17 @@ class InstructionListWidget extends StatelessWidget {
     Instruction instruction = instructions[instructionIndex];
 
     bool isSameRoutine = castManager.routine?.id == routine.id;
-    bool isSelected = isSameRoutine && castManager.lastSelectedInstruction?.id == instruction.id;
+    bool isSelected = isSameRoutine &&
+        castManager.lastSelectedInstruction?.id == instruction.id;
 
     Widget textTitle;
     Widget textIndex;
 
+    var instructionName = "${instruction.name}";
+
     if (isSelected) {
       textTitle = Text(
-        instruction.name,
+        instructionName,
         style: TextStyle(fontWeight: FontWeight.bold),
       );
       textIndex = Text(
@@ -30,7 +33,7 @@ class InstructionListWidget extends StatelessWidget {
         style: TextStyle(fontWeight: FontWeight.bold),
       );
     } else {
-      textTitle = Text(instruction.name);
+      textTitle = Text(instructionName);
       textIndex = Text(instructionIndex.toString());
     }
 
@@ -45,7 +48,7 @@ class InstructionListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: instructions?.length,
+        itemCount: instructions.length,
         itemBuilder: (context, index) {
           return Consumer<CastManager>(
             builder: (context, castManager, child) =>

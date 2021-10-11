@@ -7,11 +7,11 @@ import 'package:flutter_cast_framework/cast.dart';
 class CastManager extends ChangeNotifier {
   final _namespace = 'urn:x-cast:cast-your-instructions';
 
-  Routine _routine;
-  Routine get routine => _routine;
+  Routine? _routine;
+  Routine? get routine => _routine;
 
-  Instruction _lastSelectedInstruction;
-  Instruction get lastSelectedInstruction => _lastSelectedInstruction;
+  Instruction? _lastSelectedInstruction;
+  Instruction? get lastSelectedInstruction => _lastSelectedInstruction;
 
   CastConnectionState _castConnectionState = CastConnectionState.NOT_CONNECTED;
   CastConnectionState get castConnectionState => _castConnectionState;
@@ -51,11 +51,6 @@ class CastManager extends ChangeNotifier {
   void _sendMessage(CastMessage message) {
     try {
       var sessionManager = FlutterCastFramework.castContext.sessionManager;
-      if (sessionManager == null) {
-        debugPrint("CastState: No session");
-        return;
-      }
-
       var messageString = message.toJsonString();
       sessionManager.sendMessage(_namespace, messageString);
     } on Exception catch (ex) {
@@ -65,8 +60,6 @@ class CastManager extends ChangeNotifier {
   }
 
   void _onMessageReceived(String namespace, String message) {
-    if (message == null) return;
-
     debugPrint("CastState: onMessageReceived: $message");
 
     CastMessageResponse responseMessage =
@@ -98,16 +91,33 @@ class CastManager extends ChangeNotifier {
         break;
 
       case ResponseMessageType.SELECTED_INSTRUCTION:
-        var selectedInstructionIndex = responseMessage.selectedInstructionIndex;
-
-        if (selectedInstructionIndex < routine?.instructions?.length) {
-          _lastSelectedInstruction =
-              routine.instructions[selectedInstructionIndex];
+        var lastSelectedInstruction =
+            _getLastSelectedInstruction(responseMessage, routine);
+        if (lastSelectedInstruction != null) {
+          _lastSelectedInstruction = lastSelectedInstruction;
         }
         break;
+
+      case null:
+        debugPrint("CastState: onMessageReceived type null");
     }
 
     notifyListeners();
+  }
+
+  Instruction? _getLastSelectedInstruction(
+      CastMessageResponse responseMessage, Routine? routine) {
+    var selectedInstructionIndex = responseMessage.selectedInstructionIndex;
+    if (selectedInstructionIndex == null) return null;
+
+    var instructions = routine?.instructions;
+    if (instructions == null) return null;
+
+    if (selectedInstructionIndex < instructions.length) {
+      return instructions[selectedInstructionIndex];
+    }
+
+    return null;
   }
 
   void _onSessionStateChanged() {
