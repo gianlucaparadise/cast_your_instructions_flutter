@@ -1,214 +1,203 @@
 import '../cast/cast_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 
 class CastNotificationHandler with WidgetsBindingObserver {
-  // final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  //     FlutterLocalNotificationsPlugin();
+  final String channelName = "Cast your Instruction Player";
+  final String channelDescription =
+      "Player to control the casted instruction on the TV";
+  final String channelId = "cast:instruction:player:channel";
+  final int notificationId = 7;
 
-  // final String channelName = "Cast your Instruction Player";
-  // final String channelDescription =
-  //     "Player to control the casted instruction on the TV";
-  // final String channelId = "cast:instruction:player:channel";
-  // final int notificationId = 7;
+  static const String actionPlayerPause = "PLAYER_PAUSE";
+  static const String actionPlayerPlay = "PLAYER_PLAY";
+  static const String actionPlayerStop = "PLAYER_STOP";
 
-  // static const String actionPlayerPause = "PLAYER_PAUSE";
-  // static const String actionPlayerPlay = "PLAYER_PLAY";
-  // static const String actionPlayerStop = "PLAYER_STOP";
+  bool isAppInBackground = false;
 
-  // bool isAppInBackground = false;
-
-  // CastManager lastCastState;
+  late CastManager lastCastState;
 
   CastNotificationHandler() {
-    // debugPrint("CastNotificationHandler init");
+    debugPrint("CastNotificationHandler init");
 
-    // try {
-    //   //region FlutterLocalNotification plugin init
-    //   var initializationSettingsAndroid =
-    //       AndroidInitializationSettings('app_icon');
+    try {
+      //region AwesomeNotifications plugin init
+      // FIXME: I should await the initialization, but it would make my code complex
+      AwesomeNotifications().initialize(
+        null, // Null to use default app icon
+        [
+          NotificationChannel(
+            channelKey: channelId,
+            channelName: channelName,
+            channelDescription: channelDescription,
+            // importance is to avoid notification sound or vibration above Android 8.0. When below 8.0, use priority prop
+            importance: NotificationImportance.Low,
+            playSound: false,
+            enableVibration: false,
+            // defaultPrivacy is to display the notification also on a locked screen
+            defaultPrivacy: NotificationPrivacy.Public,
+          ),
+        ],
+      ).then((value) {
+        AwesomeNotifications().actionStream.listen(_onSelectNotification);
+      });
 
-    //   var initializationSettingsIOS = IOSInitializationSettings(
-    //       onDidReceiveLocalNotification: _onDidReceiveLocalNotification);
-
-    //   var initializationSettings = InitializationSettings(
-    //       initializationSettingsAndroid, initializationSettingsIOS);
-
-    //   // FIXME: I should await the initialization, but it would make my code complex
-    //   flutterLocalNotificationsPlugin.initialize(
-    //     initializationSettings,
-    //     onSelectNotification: _onSelectNotification,
-    //     onNotificationActionTapped: _onNotificationActionTapped,
-    //   );
-    //   //endregion
-
-    //   // this is to listen to background/foreground
-    //   WidgetsBinding.instance.addObserver(this);
-    // } catch (exception) {
-    //   debugPrint(
-    //       "CastNotificationHandler: Error while initialization:\n${exception.toString()}");
-    // }
+      // this is to listen to background/foreground
+      WidgetsFlutterBinding.ensureInitialized().addObserver(this);
+    } catch (exception) {
+      debugPrint(
+          "CastNotificationHandler: Error while initialization:\n${exception.toString()}");
+    }
   }
 
   void onCastStateUpdated(CastManager castState) {
-    // debugPrint("CastNotificationHandler: onCastStateUpdated");
-    // lastCastState = castState;
+    debugPrint("CastNotificationHandler: onCastStateUpdated");
+    lastCastState = castState;
 
-    // CastConnectionState castConnectionState = castState.castConnectionState;
+    CastConnectionState castConnectionState = castState.castConnectionState;
 
-    // switch (castConnectionState) {
-    //   case CastConnectionState.NOT_CONNECTED:
-    //     _cancelNotification();
-    //     return;
+    switch (castConnectionState) {
+      case CastConnectionState.NOT_CONNECTED:
+        _cancelNotification();
+        return;
 
-    //   case CastConnectionState.CONNECTED:
-    //     // pass: I will decide later what to do
-    //     break;
-    // }
+      case CastConnectionState.CONNECTED:
+        // pass: I will decide later what to do
+        break;
+    }
 
-    // CastPlayerState castPlayerState = castState.castPlayerState;
+    CastPlayerState castPlayerState = castState.castPlayerState;
 
-    // switch (castPlayerState) {
-    //   case CastPlayerState.LOADED:
-    //   case CastPlayerState.PLAYING:
-    //   case CastPlayerState.PAUSED:
-    //     _showNotification(castState);
-    //     break;
-    //   case CastPlayerState.STOPPED:
-    //   case CastPlayerState.UNLOADED:
-    //     _cancelNotification();
-    //     break;
-    // }
+    switch (castPlayerState) {
+      case CastPlayerState.LOADED:
+      case CastPlayerState.PLAYING:
+      case CastPlayerState.PAUSED:
+        _showNotification(castState);
+        break;
+      case CastPlayerState.STOPPED:
+      case CastPlayerState.UNLOADED:
+        _cancelNotification();
+        break;
+    }
   }
 
   void _onCastUpdatedBackground() {
-    // debugPrint("CastNotificationHandler: _onCastUpdatedBackground");
-    // onCastStateUpdated(lastCastState);
+    debugPrint("CastNotificationHandler: _onCastUpdatedBackground");
+    onCastStateUpdated(lastCastState);
   }
 
-  Future<void> _onDidReceiveLocalNotification(
-      int id, String title, String body, String payload) async {
-    // debugPrint("CastNotificationHandler: onDidReceiveLocalNotification");
-  }
+  void _onSelectNotification(ReceivedAction receivedNotification) {
+    debugPrint("CastNotificationHandler: _onSelectNotification");
 
-  Future<void> _onSelectNotification(String payload) async {
-    // debugPrint("CastNotificationHandler: onSelectNotification");
+    var actionKey = receivedNotification.buttonKeyPressed;
+    switch (actionKey) {
+      case actionPlayerPause:
+        lastCastState.pause();
+        break;
+      case actionPlayerPlay:
+        lastCastState.play();
+        break;
+      case actionPlayerStop:
+        lastCastState.stop();
+        break;
 
-    // if (payload != null) {
-    //   debugPrint('notification payload: ' + payload);
-    // }
-  }
-
-  Future<void> _onNotificationActionTapped(
-      String actionKey, Map<String, String> extras) async {
-    // debugPrint("CastNotificationHandler: onNotificationActionTapped");
-    // switch (actionKey) {
-    //   case actionPlayerPause:
-    //     lastCastState.pause();
-    //     break;
-    //   case actionPlayerPlay:
-    //     lastCastState.play();
-    //     break;
-    //   case actionPlayerStop:
-    //     lastCastState.stop();
-    //     break;
-
-    //   default:
-    //     debugPrint("CastNotificationHandler: unhandled case $actionKey");
-    //     break;
-    // }
+      default:
+        debugPrint("CastNotificationHandler: unhandled case $actionKey");
+        break;
+    }
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    // debugPrint("CastNotificationHandler didChangeAppLifecycleState $state");
-    // if (state == AppLifecycleState.paused) {
-    //   isAppInBackground = true;
+    debugPrint("CastNotificationHandler didChangeAppLifecycleState $state");
+    if (state == AppLifecycleState.paused) {
+      isAppInBackground = true;
 
-    //   // When in background, I don't get notified through the Provider anymore,
-    //   // therefore I need to attach to listener
-    //   // FIXME: I don't like very much this approach, but Provider helps me removing the singletons
+      // When in background, I don't get notified through the Provider anymore,
+      // therefore I need to attach to listener
+      // FIXME: I don't like very much this approach, but Provider helps me removing the singletons
 
-    //   lastCastState.addListener(_onCastUpdatedBackground);
-    //   _onCastUpdatedBackground();
-    // } else if (state == AppLifecycleState.resumed) {
-    //   isAppInBackground = false;
+      lastCastState.addListener(_onCastUpdatedBackground);
+      _onCastUpdatedBackground();
+    } else if (state == AppLifecycleState.resumed) {
+      isAppInBackground = false;
 
-    //   // Once in foreground, I get notified through the Provider,
-    //   // therefore I can remove my listener
+      // Once in foreground, I get notified through the Provider,
+      // therefore I can remove my listener
 
-    //   lastCastState.removeListener(_onCastUpdatedBackground);
-    //   _cancelNotification();
-    // }
+      lastCastState.removeListener(_onCastUpdatedBackground);
+      _cancelNotification();
+    }
   }
 
   Future<void> _showNotification(CastManager castState) async {
-    // // I can show the notification only when app is in background
-    // if (!isAppInBackground) return;
+    // I can show the notification only when app is in background
+    if (!isAppInBackground) return;
 
-    // // I can show the notification only when a routine has been loaded
-    // if (castState.castPlayerState == CastPlayerState.UNLOADED) return;
+    var isNotificationAllowed =
+        await AwesomeNotifications().isNotificationAllowed();
+    if (!isNotificationAllowed) {
+      debugPrint("Can't display notifications - missing permissions");
+      // TODO: Request permissions somewhere in the app
+      return;
+    }
 
-    // var mediaStyleInformation = MediaStyleInformation(
-    //   showActionsInCompactView: [0],
-    // );
-    // var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-    //   channelId,
-    //   channelName,
-    //   channelDescription,
-    //   importance: Importance
-    //       .Low, // this is to avoid notification sound or vibration above Android 8.0
-    //   priority: Priority
-    //       .Low, // this is to avoid notification sound or vibration below Android 8.0
-    //   ongoing: true,
-    //   style: AndroidNotificationStyle.Media,
-    //   styleInformation: mediaStyleInformation,
-    //   visibility: NotificationVisibility.Public,
-    // );
-    // var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-    // var platformChannelSpecifics = NotificationDetails(
-    //     androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    // I can show the notification only when a routine has been loaded
+    if (castState.castPlayerState == CastPlayerState.UNLOADED) return;
 
-    // List<NotificationAction> actions = [];
-    // if (castState.castPlayerState == CastPlayerState.PLAYING) {
-    //   actions.add(NotificationAction(
-    //     icon: 'baseline_pause_black_18dp',
-    //     title: 'Pause',
-    //     actionKey: 'PLAYER_PAUSE',
-    //     // extras: {'extra2': 'pause_extra'},
-    //   ));
-    // } else {
-    //   actions.add(NotificationAction(
-    //     icon: 'baseline_play_arrow_black_18dp',
-    //     title: 'Play',
-    //     actionKey: 'PLAYER_PLAY',
-    //     // extras: {'extra1': 'play_extra'},
-    //   ));
-    // }
-    // actions.add(NotificationAction(
-    //   icon: 'baseline_stop_black_18dp',
-    //   title: 'Stop',
-    //   actionKey: 'PLAYER_STOP',
-    // ));
+    List<NotificationActionButton> actions = [];
+    if (castState.castPlayerState == CastPlayerState.PLAYING) {
+      actions.add(NotificationActionButton(
+        icon: 'resource://drawable/baseline_pause_black_18dp',
+        label: 'Pause',
+        key: 'PLAYER_PAUSE',
+        autoCancel: false,
+        // showInCompactView: true,
+        buttonType: ActionButtonType.KeepOnTop,
+      ));
+    } else {
+      actions.add(NotificationActionButton(
+        icon: 'resource://drawable/baseline_play_arrow_black_18dp',
+        label: 'Play',
+        key: 'PLAYER_PLAY',
+        autoCancel: false,
+        // showInCompactView: true,
+        buttonType: ActionButtonType.KeepOnTop,
+      ));
+    }
+    actions.add(NotificationActionButton(
+      icon: 'resource://drawable/baseline_stop_black_18dp',
+      label: 'Stop',
+      key: 'PLAYER_STOP',
+      autoCancel: false,
+      // showInCompactView: false,
+      buttonType: ActionButtonType.KeepOnTop,
+    ));
 
-    // var title = castState.routine?.title;
-    // var instructionName =
-    //     castState.lastSelectedInstruction?.name; // FIXME: this is empty
+    var title = castState.routine?.title;
+    var instructionName =
+        castState.lastSelectedInstruction?.name; // FIXME: this is empty
 
-    // debugPrint("InstructionsName: $instructionName");
-    // debugPrint("LastSelectedInstruction: ${castState.lastSelectedInstruction}");
+    debugPrint("InstructionsName: $instructionName");
+    debugPrint("LastSelectedInstruction: ${castState.lastSelectedInstruction}");
 
-    // await flutterLocalNotificationsPlugin.show(
-    //   notificationId,
-    //   title,
-    //   instructionName,
-    //   platformChannelSpecifics,
-    //   actions: actions,
-    // );
+    await AwesomeNotifications().createNotification(
+      actionButtons: actions,
+      content: NotificationContent(
+        id: notificationId,
+        channelKey: channelId,
+        title: title,
+        body: instructionName,
+        // notificationLayout: NotificationLayout.MediaPlayer, // TODO: uncomment this once awesome_notifications is released
+        autoCancel: false,
+        showWhen: false,
+        locked: true,
+      ),
+    );
   }
 
   Future<void> _cancelNotification() async {
-    // await flutterLocalNotificationsPlugin.cancel(notificationId);
+    await AwesomeNotifications().cancel(notificationId);
   }
 }

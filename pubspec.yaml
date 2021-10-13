@@ -35,13 +35,7 @@ dependencies:
       url: git://github.com/gianlucaparadise/flutter_cast_framework.git
       ref: master
 
-  # flutter_local_notifications:
-  #   path: ../flutter_local_notifications/ # this points to a local path for testing purpose
-
-  # flutter_local_notifications:
-  #   git:
-  #     url: git://github.com/gianlucaparadise/flutter_local_notifications.git
-  #     ref: master
+  awesome_notifications: ^0.0.6+11
 
 dev_dependencies:
   flutter_test:
