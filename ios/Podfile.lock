@@ -1,36 +1,47 @@
 PODS:
+  - awesome_notifications (0.0.2):
+    - Flutter
   - Flutter (1.0.0)
   - flutter_cast_framework (0.0.1):
     - Flutter
     - google-cast-sdk-no-bluetooth (~> 4.4.4)
-  - google-cast-sdk-no-bluetooth (4.4.4):
-    - google-cast-sdk-no-bluetooth/Core (= 4.4.4)
-    - Protobuf (~> 3.0)
-  - google-cast-sdk-no-bluetooth/Core (4.4.4):
-    - Protobuf (~> 3.0)
-  - Protobuf (3.9.0)
+  - google-cast-sdk-no-bluetooth (4.4.8):
+    - google-cast-sdk-no-bluetooth/Core (= 4.4.8)
+    - GTMSessionFetcher/Core (~> 1.0)
+    - Protobuf (~> 3.12)
+  - google-cast-sdk-no-bluetooth/Core (4.4.8):
+    - GTMSessionFetcher/Core (~> 1.0)
+    - Protobuf (~> 3.12)
+  - GTMSessionFetcher/Core (1.7.0)
+  - Protobuf (3.19.0)
 
 DEPENDENCIES:
-  - Flutter (from `.symlinks/flutter/ios`)
+  - awesome_notifications (from `.symlinks/plugins/awesome_notifications/ios`)
+  - Flutter (from `Flutter`)
   - flutter_cast_framework (from `.symlinks/plugins/flutter_cast_framework/ios`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
     - google-cast-sdk-no-bluetooth
+    - GTMSessionFetcher
     - Protobuf
 
 EXTERNAL SOURCES:
+  awesome_notifications:
+    :path: ".symlinks/plugins/awesome_notifications/ios"
   Flutter:
-    :path: ".symlinks/flutter/ios"
+    :path: Flutter
   flutter_cast_framework:
     :path: ".symlinks/plugins/flutter_cast_framework/ios"
 
 SPEC CHECKSUMS:
-  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  awesome_notifications: 74462bc8e68b11f8235d78422266886759e9da61
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_cast_framework: 2728e840a40f44fb3cbcedbcd2c8d3f4efd53839
-  google-cast-sdk-no-bluetooth: e0af19280673fba052f7fc3ddde6116c733ce505
-  Protobuf: 1097ca58584c8d9be81bfbf2c5ff5975648dd87a
+  google-cast-sdk-no-bluetooth: d5a60530c72b0907fb302d835952b6cb0ba5f128
+  GTMSessionFetcher: 43748f93435c2aa068b1cbe39655aaf600652e91
+  Protobuf: e9b99dd5da72f665ec503b19191f245a22188b4d
 
-PODFILE CHECKSUM: b6a0a141693093b304368d08511b46cf3d1d0ac5
+PODFILE CHECKSUM: fe0e1ee7f3d1f7d00b11b474b62dd62134535aea
 
-COCOAPODS: 1.7.5
+COCOAPODS: 1.11.2
