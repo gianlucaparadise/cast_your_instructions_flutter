@@ -153,7 +153,7 @@ class CastNotificationHandler with WidgetsBindingObserver {
         label: 'Pause',
         key: 'PLAYER_PAUSE',
         autoCancel: false,
-        // showInCompactView: true,
+        showInCompactView: true,
         buttonType: ActionButtonType.KeepOnTop,
       ));
     } else {
@@ -162,7 +162,7 @@ class CastNotificationHandler with WidgetsBindingObserver {
         label: 'Play',
         key: 'PLAYER_PLAY',
         autoCancel: false,
-        // showInCompactView: true,
+        showInCompactView: true,
         buttonType: ActionButtonType.KeepOnTop,
       ));
     }
@@ -171,7 +171,7 @@ class CastNotificationHandler with WidgetsBindingObserver {
       label: 'Stop',
       key: 'PLAYER_STOP',
       autoCancel: false,
-      // showInCompactView: false,
+      showInCompactView: false,
       buttonType: ActionButtonType.KeepOnTop,
     ));
 
@@ -189,7 +189,7 @@ class CastNotificationHandler with WidgetsBindingObserver {
         channelKey: channelId,
         title: title,
         body: instructionName,
-        // notificationLayout: NotificationLayout.MediaPlayer, // TODO: uncomment this once awesome_notifications is released
+        notificationLayout: NotificationLayout.MediaPlayer,
         autoCancel: false,
         showWhen: false,
         locked: true,

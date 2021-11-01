@@ -35,7 +35,7 @@ dependencies:
       url: git://github.com/gianlucaparadise/flutter_cast_framework.git
       ref: master
 
-  awesome_notifications: ^0.0.6+11
+  awesome_notifications: ^0.0.6+12
 
 dev_dependencies:
   flutter_test:
