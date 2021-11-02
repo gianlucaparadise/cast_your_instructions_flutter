@@ -9,7 +9,7 @@ import GoogleCast
   
   override func application(
     _ application: UIApplication,
-    didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     let criteria = GCKDiscoveryCriteria(applicationID: kReceiverAppID)
     let options = GCKCastOptions(discoveryCriteria: criteria)
