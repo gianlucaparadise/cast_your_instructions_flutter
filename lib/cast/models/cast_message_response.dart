@@ -24,6 +24,7 @@ class CastMessageResponse {
 }
 
 enum ResponseMessageType {
+  IDLE,
   LOADED,
   PLAYED,
   PAUSED,

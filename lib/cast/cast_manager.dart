@@ -7,6 +7,8 @@ import 'package:flutter_cast_framework/cast.dart';
 class CastManager extends ChangeNotifier {
   final _namespace = 'urn:x-cast:cast-your-instructions';
 
+  late FlutterCastFramework castFramework;
+
   Routine? _routine;
   Routine? get routine => _routine;
 
@@ -21,10 +23,10 @@ class CastManager extends ChangeNotifier {
 
   CastManager() {
     debugPrint("CastState: constructed");
-    FlutterCastFramework.namespaces = [_namespace];
-    FlutterCastFramework.castContext.sessionManager.onMessageReceived =
+    castFramework = FlutterCastFramework.create([_namespace]);
+    castFramework.castContext.sessionManager.onMessageReceived =
         _onMessageReceived;
-    FlutterCastFramework.castContext.sessionManager.state
+    castFramework.castContext.sessionManager.state
         .addListener(_onSessionStateChanged);
   }
 
@@ -50,7 +52,7 @@ class CastManager extends ChangeNotifier {
 
   void _sendMessage(CastMessage message) {
     try {
-      var sessionManager = FlutterCastFramework.castContext.sessionManager;
+      var sessionManager = castFramework.castContext.sessionManager;
       var messageString = message.toJsonString();
       sessionManager.sendMessage(_namespace, messageString);
     } on Exception catch (ex) {
@@ -121,7 +123,7 @@ class CastManager extends ChangeNotifier {
   }
 
   void _onSessionStateChanged() {
-    switch (FlutterCastFramework.castContext.sessionManager.state.value) {
+    switch (castFramework.castContext.sessionManager.state.value) {
       case SessionState.session_start_failed:
       case SessionState.session_resume_failed:
       case SessionState.session_ended:

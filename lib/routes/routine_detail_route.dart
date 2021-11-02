@@ -1,5 +1,4 @@
 import 'package:cast_your_instructions_flutter/cast/cast_manager.dart';
-import 'package:flutter_cast_framework/cast.dart';
 import 'package:flutter_cast_framework/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -54,14 +53,17 @@ class _RoutineDetailRouteState extends State<RoutineDetailRoute> {
 
   @override
   Widget build(BuildContext context) {
+    CastManager castManager = Provider.of<CastManager>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text("Detail"),
         actions: [
           IconButton(
-            icon: CastIcon(),
+            icon: CastIcon(
+              castFramework: castManager.castFramework,
+            ),
             onPressed: () =>
-                FlutterCastFramework.castContext.showCastChooserDialog(),
+                castManager.castFramework.castContext.showCastChooserDialog(),
           ),
         ],
       ),
